@@ -4,6 +4,8 @@ import { dev } from '$app/environment';
 
 export const load = (async ({ url, locals: { supabase } }) => {
 
+    // I use +page.server.ts so we can control the error page better
+
     const errorDescription = url.searchParams.get('error_description');
     if (errorDescription) {
         if (dev) {
