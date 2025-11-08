@@ -1,14 +1,14 @@
 import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({
-    locals: { getSafeUser },
+    locals: { getUser },
     cookies,
     depends
 }) => {
 
     depends('supabase:auth');
 
-    const { user } = await getSafeUser();
+    const { user } = await getUser();
 
     return {
         user,

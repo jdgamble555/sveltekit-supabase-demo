@@ -22,7 +22,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       },
     });
 
-  event.locals.getSafeUser = async () => {
+  event.locals.getUser = async () => {
 
     const {
       data: claimsData,
@@ -43,9 +43,22 @@ export const handle: Handle = async ({ event, resolve }) => {
       };
     }
 
+    const now = Math.floor(Date.now() / 1000);
+    const exp = claimsData?.claims.exp;
+    const isExpired = exp && exp < now;
+
+    if (!isExpired) {
+      return {
+        error: null,
+        user: claimsData.claims
+      };
+    }
+
+    await event.locals.supabase.auth.signOut();
+
     return {
       error: null,
-      user: claimsData.claims
+      user: null
     };
   }
 

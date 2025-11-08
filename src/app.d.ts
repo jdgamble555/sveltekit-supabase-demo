@@ -6,7 +6,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			supabase: SupabaseClient
-			getSafeUser(): Promise<{
+			getUser(): Promise<{
 				user: JwtPayload | null
 				error: Error | null
 			}>

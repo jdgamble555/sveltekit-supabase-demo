@@ -1,9 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSafeUser } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
 
-    const { user } = await getSafeUser()
+    const { user } = await getUser()
 
     if (!user) {
         redirect(303, '/')
@@ -20,14 +20,14 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSafeUser } }
 
 export const actions: Actions = {
 
-    update: async ({ request, locals: { supabase, getSafeUser } }) => {
+    update: async ({ request, locals: { supabase, getUser } }) => {
         const formData = await request.formData()
         const fullName = formData.get('fullName') as string
         const username = formData.get('username') as string
         const website = formData.get('website') as string
         const avatarUrl = formData.get('avatarUrl') as string
 
-        const { user } = await getSafeUser()
+        const { user } = await getUser()
 
         if (!user) {
             return fail(403, { fullName, username, website, avatarUrl })
@@ -58,9 +58,9 @@ export const actions: Actions = {
             avatarUrl,
         }
     },
-    signout: async ({ locals: { supabase, getSafeUser } }) => {
+    signout: async ({ locals: { supabase, getUser } }) => {
         
-        const { user } = await getSafeUser()
+        const { user } = await getUser()
         if (user) {
             await supabase.auth.signOut()
             redirect(303, '/')

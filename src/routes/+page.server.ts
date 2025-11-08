@@ -1,9 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ url, locals: { getSafeUser } }) => {
+export const load: PageServerLoad = async ({ url, locals: { getUser } }) => {
 
-    const { user } = await getSafeUser()
+    const { user } = await getUser()
 
     // if the user is already logged in return them to the account page
     if (user) {
