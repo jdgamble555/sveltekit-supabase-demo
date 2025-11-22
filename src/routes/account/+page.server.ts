@@ -39,7 +39,7 @@ export const actions: Actions = {
             username,
             website,
             avatar_url: avatarUrl,
-            updated_at: new Date(),
+            updated_at: new Date().toISOString(),
         })
 
         if (error) {
