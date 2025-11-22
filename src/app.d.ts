@@ -1,3 +1,4 @@
+import type { Database } from '$lib/database.types'
 import { SupabaseClient, type JwtPayload } from '@supabase/supabase-js'
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -5,7 +6,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			supabase: SupabaseClient
+			supabase: SupabaseClient<Database>
 			getUser(): Promise<{
 				user: JwtPayload | null
 				error: Error | null
