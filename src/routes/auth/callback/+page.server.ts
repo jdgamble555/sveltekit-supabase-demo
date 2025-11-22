@@ -4,31 +4,33 @@ import { dev } from '$app/environment';
 
 export const load = (async ({ url, locals: { supabase } }) => {
 
-    // I use +page.server.ts so we can control the error page better
-
     const errorDescription = url.searchParams.get('error_description');
+
     if (errorDescription) {
         if (dev) {
             console.error(errorDescription);
         }
-        const description = errorDescription;
-        error(400, description);
+        error(400, errorDescription);
     }
 
     const code = url.searchParams.get('code');
     const next = url.searchParams.get('next') || '/';
 
-    if (code) {
-        const { error: codeError } = await supabase
-            .auth
-            .exchangeCodeForSession(code);
-        if (!codeError) {
-            redirect(303, next);
-        }
-        if (dev) {
-            console.error(codeError);
-        }
-        error(400, codeError.message);
+    if (!code) {
+        error(400, 'No code provided');
     }
+
+    const { error: codeError } = await supabase
+        .auth
+        .exchangeCodeForSession(code);
+
+    if (!codeError) {
+        redirect(303, next);
+    }
+    if (dev) {
+        console.error(codeError);
+    }
+    error(400, codeError.message);
+
 
 }) satisfies PageServerLoad;
