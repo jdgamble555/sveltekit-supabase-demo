@@ -7,9 +7,11 @@ export const load = (async ({ url, locals: { supabase } }) => {
     const errorDescription = url.searchParams.get('error_description');
 
     if (errorDescription) {
+
         if (dev) {
             console.error(errorDescription);
         }
+
         error(400, errorDescription);
     }
 
@@ -24,13 +26,15 @@ export const load = (async ({ url, locals: { supabase } }) => {
         .auth
         .exchangeCodeForSession(code);
 
-    if (!codeError) {
-        redirect(303, next);
-    }
-    if (dev) {
-        console.error(codeError);
-    }
-    error(400, codeError.message);
+    if (codeError) {
 
+        if (dev) {
+            console.error(codeError);
+        }
+
+        error(400, codeError.message);
+    }
+
+    redirect(303, next);
 
 }) satisfies PageServerLoad;
