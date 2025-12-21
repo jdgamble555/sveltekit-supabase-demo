@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
     const { data: profile } = await supabase
         .from('profiles')
         .select(`username, full_name, website, avatar_url`)
-        .eq('id', user.sub)
+        .eq('id', user.id)
         .single()
 
     return { user, profile }
@@ -34,7 +34,7 @@ export const actions: Actions = {
         }
 
         const { error } = await supabase.from('profiles').upsert({
-            id: user.sub,
+            id: user.id,
             full_name: fullName,
             username,
             website,
